@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category    Uaudio
+ * @package     Uaudio
+ * @author      eric@uaudio.com
+ */
+-->
+<config>
+    <modules>
+        <Uaudio_Storage>
+            <active>true</active>
+            <codePool>community</codePool>
+        </Uaudio_Storage>
+    </modules>
+</config>

@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<config>
+    <sections>
+        <system>
+            <groups>
+                <media_storage_configuration>
+                    <fields>
+                        <media_storage>
+                            <comment>Before selecting a new media storage location. Run the synchronization shell script
+                                (shell/uaudio/storage/synchronize.php) to set media as available in new location.</comment>
+                        </media_storage>
+                        <synchronize>
+                            <comment></comment>
+                        </synchronize>
+                        <media_s3_access_key translate="label">
+                            <label>Access Key ID</label>
+                            <frontend_type>obscure</frontend_type>
+                            <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends><media_storage>2</media_storage></depends>
+                        </media_s3_access_key>
+                        <media_s3_secret_key translate="label">
+                            <label>Secret Key</label>
+                            <frontend_type>obscure</frontend_type>
+                            <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                            <sort_order>201</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends><media_storage>2</media_storage></depends>
+                        </media_s3_secret_key>
+                        <media_s3_region translate="label">
+                            <label>Region</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>202</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends><media_storage>2</media_storage></depends>
+                        </media_s3_region>
+                        <media_s3_bucket translate="label">
+                            <label>Bucket</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>203</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends><media_storage>2</media_storage></depends>
+                        </media_s3_bucket>
+                        <media_s3_folder translate="label">
+                            <label>Folder</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>204</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends><media_storage>2</media_storage></depends>
+                        </media_s3_folder>
+                        <media_local_folder>
+                            <label>Folder</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>205</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends><media_storage>3</media_storage></depends>
+                            <comment><![CDATA[Full system path.]]></comment>
+                        </media_local_folder>
+                    </fields>
+                </media_storage_configuration>
+            </groups>
+        </system>
+    </sections>
+</config>
