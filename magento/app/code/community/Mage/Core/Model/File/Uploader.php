@@ -49,6 +49,7 @@ class Mage_Core_Model_File_Uploader extends Varien_File_Uploader {
         $storageModel->setAllowRenameFiles($this->_allowRenameFiles);
 
         $uploadDestination = $storageModel->moveUploadFile($this->_file['tmp_name'], $destinationFile);
+        $uploadDestination = str_replace('//', '/', $uploadDestination);
         if($uploadDestination) {
             $fileName = basename($uploadDestination);
             $path = dirname($uploadDestination);
@@ -57,8 +58,8 @@ class Mage_Core_Model_File_Uploader extends Varien_File_Uploader {
                 $path = str_replace($fileName, '', $uploadDestination);
             }
 
-            $this->_uploadedFileName = basename($uploadDestination);
-            $this->_uploadedFileDir = dirname($uploadDestination);
+            $this->_uploadedFileName = $fileName;
+            $this->_uploadedFileDir = $path;
             $this->_result = $this->_file;
             $this->_result['path'] = $path;
             $this->_result['file'] = $fileName;
