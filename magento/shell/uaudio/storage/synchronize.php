@@ -1,5 +1,5 @@
 <?php
-chdir('/home/vagrant/Code/magento/htdocs/shell');
+chdir('../..');
 require_once('abstract.php');
 ini_set('memory_limit', '512M');
 
