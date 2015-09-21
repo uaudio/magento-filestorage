@@ -49,15 +49,6 @@ class Uaudio_Storage_Model_Storage_S3 extends Uaudio_Storage_Model_Storage_Abstr
     }
 
     /**
-     * Get storage name
-     *
-     * @return string
-     */
-    public function getStorageName() {
-        return Mage::helper('core')->__('Amazon S3');
-    }
-
-    /**
      * Get the settings for this storage type
      *
      * @return array

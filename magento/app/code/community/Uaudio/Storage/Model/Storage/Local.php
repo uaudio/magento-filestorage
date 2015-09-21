@@ -14,15 +14,6 @@ class Uaudio_Storage_Model_Storage_Local extends Uaudio_Storage_Model_Storage_Ab
     const STORAGE_MEDIA_ID = 3;
 
     /**
-     * Get storage name
-     *
-     * @return string
-     */
-    public function getStorageName() {
-        return Mage::helper('core')->__('Local');
-    }
-
-    /**
      * Initialize Local adapter settings
      *
      * @param array - allow settings override during synchronization

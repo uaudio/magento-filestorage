@@ -47,7 +47,10 @@ abstract class Uaudio_Storage_Model_Storage_Abstract extends Mage_Core_Model_Fil
      *
      * @return string
      */
-    abstract public function getStorageName();
+    public function getStorageName() {
+        $options = getStorageOptions();
+        return $options[self::STORAGE_MEDIA_ID]['label'];
+    }
 
     /**
      * Get the flysystem adapter
