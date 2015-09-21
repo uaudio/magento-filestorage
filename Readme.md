@@ -67,6 +67,5 @@ Create MyModule/Model/Storage/MyStorage.php extend Uaudio_Storage_Model_Storage_
 * Implement for Dataflow, Downloadable, ImportExport, XmlConnect
 * Add unit tests 
 * Setup travis.ci testing
-* Setup modman install
 * Add tags to redis cache
 

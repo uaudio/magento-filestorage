@@ -1,0 +1,4 @@
+magento/app/code/community/Mage/Core/Model/File/Uploader.php            app/code/community/Mage/Core/Model/File/Uploader.php
+magento/app/code/community/Uaudio/Storage                               app/code/community/Uaudio/Storage
+magento/app/code/community/Uaudio/vendor                                app/code/community/Uaudio/vendor
+magento/app/etc/modules/Uaudio_Storage.xml                              app/etc/modules/Uaudio_Storage.xml
