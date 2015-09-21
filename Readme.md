@@ -1,7 +1,5 @@
 # Magento File Storage Module
 
-Author: Eric Schmitt
-
 **Magento File Storage** is an extension that lets you use different storage backends for your magento media. Uses the [Flysystem](http://flysystem.thephpleague.com) filesystem abstraction to connect to storage backends.
 
 ## Install
@@ -59,9 +57,12 @@ Add settings to MyModule/etc/system.xml
     </media_storage_configuration>
 </config>
 ```
-Create MyModule/Model/Storage/MyStorage.php extend Uaudio_Storage_Model_Storage_Abstract Implement getStorageName, _getAdapter, settings methods
+Create MyModule/Model/Storage/MyStorage.php extend Uaudio_Storage_Model_Storage_Abstract Implement _getAdapter, settings methods
 
 ## TODO:
+* Change name from storage to filestorage
+* Fix package name in release
+* Add create package script
 * Test failure scenarios
 * Verify exception returns are handled properly
 * Implement for Dataflow, Downloadable, ImportExport, XmlConnect
