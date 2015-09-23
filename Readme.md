@@ -10,7 +10,7 @@
 
 ## AWS Setup
 * Setup IAM user / or IAM role if on EC2
-* Synchronzie media (php shell/uaudio/storage/synchronize.php --type storage_s3 --setting s3_access_key=KEY,s3_secret_key=SECRECT,s3_region=us-west-1,s3_bucket=BUCKET,s3_folder=PREFIX --clear --verbose
+* Synchronzie media (php shell/uaudio/storage/synchronize.php --type storage_s3 --settings "s3_access_key=KEY,s3_secret_key=SECRECT,s3_region=us-west-1,s3_bucket=BUCKET,s3_folder=PREFIX" --clear --verbose
 * Enable S3 storage System -> Configuration -> Advanced -> System
 * Under Storage Configuration for Media - select Amazon S3
 * General -> Web -> Base Media Url to S3
