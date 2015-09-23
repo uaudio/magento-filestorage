@@ -3,3 +3,4 @@ magento/app/code/community/Uaudio/Storage                               app/code
 magento/app/code/community/Uaudio/vendor                                app/code/community/Uaudio/vendor
 magento/app/etc/modules/Uaudio_Storage.xml                              app/etc/modules/Uaudio_Storage.xml
 magento/shell/uaudio/storage                                            shell/uaudio/storage
+magento/app/code/community/Uaudio/composer.json                         app/code/community/Uaudio/composer.json

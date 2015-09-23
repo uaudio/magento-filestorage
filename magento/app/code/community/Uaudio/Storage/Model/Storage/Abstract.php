@@ -48,8 +48,8 @@ abstract class Uaudio_Storage_Model_Storage_Abstract extends Mage_Core_Model_Fil
      * @return string
      */
     public function getStorageName() {
-        $options = getStorageOptions();
-        return $options[self::STORAGE_MEDIA_ID]['label'];
+        $options = Mage::helper('uaudio_storage')->getStorageOptions();
+        return $options[$this::STORAGE_MEDIA_ID]['label'];
     }
 
     /**
@@ -188,6 +188,26 @@ abstract class Uaudio_Storage_Model_Storage_Abstract extends Mage_Core_Model_Fil
     }
 
     /**
+     * Get filesize for a file
+     *
+     * @param string
+     * @param int
+     */
+    public function getSize($file) {
+        return $this->_getFilesystem()->getSize($this->getRelativeDestination($file));
+    }
+
+    /**
+     * Get mimetype for a file
+     *
+     * @param string
+     * @param int
+     */
+    public function getMimetype($file) {
+        return $this->_getFilesystem()->getMimetype($this->getRelativeDestination($file));
+    }
+
+    /**
      * Move an upload file to storage
      *
      * @param string
@@ -264,6 +284,16 @@ abstract class Uaudio_Storage_Model_Storage_Abstract extends Mage_Core_Model_Fil
      */
     public function readStream($filePath) {
         return $this->_getFilesystem()->readStream($this->getRelativeDestination($filePath));
+    }
+
+    /**
+     * Read a files contents
+     *
+     * @param string
+     * @return string
+     */
+    public function read($filePath) {
+        return $this->_getFilesystem()->read($this->getRelativeDestination($filePath));
     }
 
     /**

@@ -1,5 +1,5 @@
 <?php
-chdir('../..');
+chdir(__DIR__.'/../..');
 require_once('abstract.php');
 ini_set('memory_limit', '512M');
 
