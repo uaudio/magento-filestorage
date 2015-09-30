@@ -70,14 +70,20 @@ class Uaudio_Storage_Model_Storage_S3 extends Uaudio_Storage_Model_Storage_Abstr
      */
     protected function _getAdapter() {
         if(!$this->_adapter) {
-            $client = S3Client::factory([
-                'credentials' => [
-                    'key'    => $this->_key,
-                    'secret' => $this->_secret,
-                ],
+            $config = [
                 'region' => $this->_region,
                 'version' => '2006-03-01',
-            ]);
+            ];
+
+            if($this->_key) {
+                $config['credentials']['key'] = $this->_key;
+            }
+
+            if($this->_secret) {
+                $config['credentials']['secret'] = $this->_secret;
+            }
+
+            $client = S3Client::factory($config);
             $this->_adapter = new AwsS3Adapter($client, $this->_bucket, $this->_folder);
         }
         return $this->_adapter;
