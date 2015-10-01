@@ -144,7 +144,7 @@ class Uaudio_Storage_Model_Catalog_Product_Image extends Mage_Catalog_Model_Prod
             return 0;
         }
 
-        if(strstr($file, Mage::getBaseDir('media'))) {
+        if($this->_getStorageModel()->isInMedia($file)) {
             $imageInfo = getimagesize($this->_getFileFromStorage($file));
         } else {
             $imageInfo = getimagesize($file);
@@ -217,7 +217,12 @@ class Uaudio_Storage_Model_Catalog_Product_Image extends Mage_Catalog_Model_Prod
      */
     protected function _getFileFromStorage($file) {
         if(!$this->_tmpName) {
-            $this->_tmpName = $this->_getStorageModel()->copyFileToTmp($file);
+            try {
+                $this->_tmpName = $this->_getStorageModel()->copyFileToTmp($file);
+            } catch (Exception $e) {
+                Mage::logException($e);
+                $this->_tmpName = null;
+            }
         }
         return $this->_tmpName;
     }

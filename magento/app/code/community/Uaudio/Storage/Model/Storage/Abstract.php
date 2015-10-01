@@ -248,11 +248,21 @@ abstract class Uaudio_Storage_Model_Storage_Abstract extends Mage_Core_Model_Fil
      * @return bool
      */
     public function fileExists($filePath) {
-        if(($filePath[0] == DS && (strstr($filePath, $this->_mediaDir[0]) || strstr($filePath, $this->_mediaDir[1]))) || $filePath[0] != DS) {
+        if($this->isInMedia($filePath)) {
             return $this->_getFilesystem()->has($this->getRelativeDestination($filePath));
         } else {
             return file_exists($filePath);
         }
+    }
+
+    /**
+     * Check if requested file is in the media directory
+     *
+     * @param string
+     * @return bool
+     */
+    public function isInMedia($filePath) {
+        return (($filePath[0] == DS && (strstr($filePath, $this->_mediaDir[0]) || strstr($filePath, $this->_mediaDir[1]))) || $filePath[0] != DS);
     }
 
     /**
@@ -331,12 +341,19 @@ abstract class Uaudio_Storage_Model_Storage_Abstract extends Mage_Core_Model_Fil
      * @return string
      */
     public function copyFileToTmp($file) {
-        $fileStream = $this->readStream($file);
-        $tmpName = tempnam(sys_get_temp_dir(), 'uaudio_storage_');
-        $fp = fopen($tmpName, 'w+');
-        stream_copy_to_stream($fileStream, $fp);
-        fclose($fp);
-        return $tmpName;
+        if($this->fileExists($file)) {
+            $tmpName = tempnam(sys_get_temp_dir(), 'uaudio_storage_');
+            if($this->isInMedia($file)) {
+                $fileStream = $this->readStream($file);
+                $fp = fopen($tmpName, 'w+');
+                stream_copy_to_stream($fileStream, $fp);
+                fclose($fp);
+            } else {
+                copy($file, $tmpName);
+            }
+            return $tmpName;
+        }
+        return null;
     }
 
     /**
