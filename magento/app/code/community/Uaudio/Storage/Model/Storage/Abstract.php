@@ -2,6 +2,7 @@
 require_once('Uaudio/vendor/autoload.php');
 use League\Flysystem\Filesystem;
 use League\Flysystem\Cached\CachedAdapter;
+use League\Flysystem\Cached\Storage\Memory as CacheStore;
 
 /**
  * Abstract file storage model class
@@ -90,7 +91,8 @@ abstract class Uaudio_Storage_Model_Storage_Abstract extends Mage_Core_Model_Fil
             if(Mage::app()->useCache('file_storage') && $cache = $this->_getCache() && !$this->getNoCache()) {
                 $adapter = new CachedAdapter($this->_getAdapter(), $cache);
             } else {
-                $adapter = $this->_getAdapter();
+                $cacheStore = new CacheStore();
+                $adapter = new CachedAdapter($this->_getAdapter(), $cacheStore);
             }
             $this->_filesystem = new Filesystem($adapter);
         }
