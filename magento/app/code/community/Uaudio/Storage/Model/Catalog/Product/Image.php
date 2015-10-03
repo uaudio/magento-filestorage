@@ -41,6 +41,14 @@ class Uaudio_Storage_Model_Catalog_Product_Image extends Mage_Catalog_Model_Prod
         }
 
         if ($file) {
+            $path = $this->_getPathParameters();
+
+            // check if cached file already exists
+            if($this->_fileExists(implode('/', $path) . $file)) {
+                $this->_newFile = implode('/', $path) . $file;
+                return $this;
+            }
+
             if ((!$this->_fileExists($baseDir . $file)) || !$this->_checkMemory($baseDir . $file)) {
                 $file = null;
             }
@@ -78,14 +86,33 @@ class Uaudio_Storage_Model_Catalog_Product_Image extends Mage_Catalog_Model_Prod
         $this->_baseFile = $baseFile;
 
         // build new filename (most important params)
+        $path = $this->_getPathParameters();
+
+        // append prepared filename
+        $this->_newFile = implode('/', $path) . $file; // the $file contains heading slash
+
+        if($this->isCached() && $this->_tmpName) {
+            unlink($this->_tmpName);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get path paramters for cached product image
+     *
+     * @return array
+     */
+    protected function _getPathParameters() {
         $path = array(
             Mage::getSingleton('catalog/product_media_config')->getBaseMediaPath(),
             'cache',
             Mage::app()->getStore()->getId(),
             $path[] = $this->getDestinationSubdir()
         );
-        if((!empty($this->_width)) || (!empty($this->_height)))
+        if((!empty($this->_width)) || (!empty($this->_height))) {
             $path[] = "{$this->_width}x{$this->_height}";
+        }
 
         // add misk params as a hash
         $miscParams = array(
@@ -108,11 +135,7 @@ class Uaudio_Storage_Model_Catalog_Product_Image extends Mage_Catalog_Model_Prod
         }
 
         $path[] = md5(implode('_', $miscParams));
-
-        // append prepared filename
-        $this->_newFile = implode('/', $path) . $file; // the $file contains heading slash
-
-        return $this;
+        return $path;
     }
     
     /**
