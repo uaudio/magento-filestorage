@@ -88,7 +88,7 @@ abstract class Uaudio_Storage_Model_Storage_Abstract extends Mage_Core_Model_Fil
      */
     protected function _getFilesystem() {
         if(!$this->_filesystem) {
-            if(Mage::app()->useCache('file_storage') && $cache = $this->_getCache() && !$this->getNoCache()) {
+            if(Mage::app()->useCache('file_storage') && ($cache = $this->_getCache()) && !$this->getNoCache()) {
                 $adapter = new CachedAdapter($this->_getAdapter(), $cache);
             } else {
                 $cacheStore = new CacheStore();
@@ -221,7 +221,6 @@ abstract class Uaudio_Storage_Model_Storage_Abstract extends Mage_Core_Model_Fil
         if($this->getAllowRenameFiles()) {
             $destinationFile = $this->_getNewDestinationFile($destinationFile);
         }
-
         $stream = fopen($uploadFile, 'r+');
         $this->_getFilesystem()->putStream($destinationFile, $stream);
         if(is_resource($stream)) {
