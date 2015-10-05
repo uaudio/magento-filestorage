@@ -1,6 +1,5 @@
 <?php
 require_once('Uaudio/vendor/autoload.php');
-use League\Flysystem\Cached\Storage\Predis as Cache;
 
 /**
  * Flysystem redis cache using magento cache settings
@@ -9,23 +8,25 @@ use League\Flysystem\Cached\Storage\Predis as Cache;
  * @package     Uaudio_Storage
  * @author      Universal Audio <web-dev@uaudio.com>
  */
-class Uaudio_Storage_Model_Storage_Cache_Redis extends Cache {
+class Uaudio_Storage_Model_Storage_Cache_Redis extends League\Flysystem\Cached\Storage\AbstractCache {
+
+    protected $key = 'flysystem';
 
     /**
-     * Initialize redis cache object using magento cache settings
+     * Load the cache
      */
-    public function __construct() {
-        $options = Mage::getConfig()->getNode('global/cache');
-        $options = $options ? $options->asArray() : [];
-        $options = $options['backend_options'];
-        $options['prefix'] = Cm_Cache_Backend_Redis::PREFIX_KEY;
+    public function load() {
+        $contents = Mage::app()->loadCache($this->key);
+        if($contents) {
+            $this->setFromStorage(gzuncompress($contents));
+        }
+    }
 
-        $client = new \Predis\Client([
-            'scheme' => 'tcp',
-            'host'   => $options['server'],
-            'port'   => $options['port'],
-            'database' => $options['database'],
-        ], ['prefix' => $options['prefix']]);
-        parent::__construct($client);
+    /**
+     * Save the cache
+     */
+    public function save() {
+        $contents = gzcompress($this->getForStorage());
+        Mage::app()->saveCache($contents, $this->key, ['FILE_STORAGE'], $this->expire);
     }
 }
