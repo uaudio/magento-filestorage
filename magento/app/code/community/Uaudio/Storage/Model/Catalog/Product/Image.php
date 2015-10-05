@@ -9,6 +9,8 @@
  */
 class Uaudio_Storage_Model_Catalog_Product_Image extends Mage_Catalog_Model_Product_Image {
     
+    protected $_fileName;
+
     /**
      * Get file storage model
      *
@@ -46,10 +48,7 @@ class Uaudio_Storage_Model_Catalog_Product_Image extends Mage_Catalog_Model_Prod
             // check if cached file already exists
             if($this->_fileExists(implode('/', $path) . $file)) {
                 $this->_newFile = implode('/', $path) . $file;
-                return $this;
-            }
-
-            if ((!$this->_fileExists($baseDir . $file)) || !$this->_checkMemory($baseDir . $file)) {
+            } else if ((!$this->_fileExists($baseDir . $file)) || !$this->_checkMemory($baseDir . $file)) {
                 $file = null;
             }
         }
@@ -77,6 +76,7 @@ class Uaudio_Storage_Model_Catalog_Product_Image extends Mage_Catalog_Model_Prod
             }
             $this->_isBaseFilePlaceholder = true;
         }
+        $this->_fileName = $file;
 
         $baseFile = $baseDir . $file;
         if ((!$file) || (!$this->_fileExists($baseFile))) {
@@ -93,24 +93,45 @@ class Uaudio_Storage_Model_Catalog_Product_Image extends Mage_Catalog_Model_Prod
 
         if($this->isCached() && $this->_tmpName) {
             unlink($this->_tmpName);
+            $this->_tmpName = null;
         }
 
         return $this;
     }
 
     /**
+     * Check if image is already cached
+     *
+     * @param int
+     * @param int
+     * @return bool
+     */
+    public function isCached($width=null, $height=null) {
+        if((!empty($width)) || (!empty($height)) && $this->_fileName) {
+            $path = $this->_getPathParameters($width, $height);
+            return $this->_fileExists(implode('/', $path).$this->_fileName);
+        } else {
+            return $this->_fileExists($this->_newFile);
+        }
+    }
+
+    /**
      * Get path paramters for cached product image
      *
+     * @param int
+     * @param int
      * @return array
      */
-    protected function _getPathParameters() {
+    protected function _getPathParameters($width=null, $height=null) {
         $path = array(
             Mage::getSingleton('catalog/product_media_config')->getBaseMediaPath(),
             'cache',
             Mage::app()->getStore()->getId(),
             $path[] = $this->getDestinationSubdir()
         );
-        if((!empty($this->_width)) || (!empty($this->_height))) {
+        if((!empty($width)) || (!empty($height))) {
+            $path[] = "{$width}x{$height}";
+        } else if((!empty($this->_width)) || (!empty($this->_height))) {
             $path[] = "{$this->_width}x{$this->_height}";
         }
 
