@@ -84,7 +84,7 @@ class Uaudio_Storage_Model_Storage_S3 extends Uaudio_Storage_Model_Storage_Abstr
             }
 
             $client = S3Client::factory($config);
-            $this->_adapter = new AwsS3Adapter($client, $this->_bucket, $this->_folder);
+            $this->_adapter = new Uaudio_Storage_Model_League_AwsS3Adapter($client, $this->_bucket, $this->_folder);
         }
         return $this->_adapter;
     }

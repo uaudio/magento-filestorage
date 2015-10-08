@@ -95,6 +95,7 @@ abstract class Uaudio_Storage_Model_Storage_Abstract extends Mage_Core_Model_Fil
                 $adapter = new CachedAdapter($this->_getAdapter(), $cacheStore);
             }
             $this->_filesystem = new Filesystem($adapter);
+            $this->_filesystem->addPlugin(new League\Flysystem\Plugin\GetWithMetadata());
         }
         return $this->_filesystem;
     }
@@ -183,7 +184,7 @@ abstract class Uaudio_Storage_Model_Storage_Abstract extends Mage_Core_Model_Fil
      * Get timestamp for a file
      *
      * @param string
-     * @param int
+     * @return int
      */
     public function getTimestamp($file) {
         return $this->_getFilesystem()->getTimestamp($this->getRelativeDestination($file));
@@ -193,7 +194,7 @@ abstract class Uaudio_Storage_Model_Storage_Abstract extends Mage_Core_Model_Fil
      * Get filesize for a file
      *
      * @param string
-     * @param int
+     * @return int
      */
     public function getSize($file) {
         return $this->_getFilesystem()->getSize($this->getRelativeDestination($file));
@@ -203,10 +204,20 @@ abstract class Uaudio_Storage_Model_Storage_Abstract extends Mage_Core_Model_Fil
      * Get mimetype for a file
      *
      * @param string
-     * @param int
+     * @return string
      */
     public function getMimetype($file) {
         return $this->_getFilesystem()->getMimetype($this->getRelativeDestination($file));
+    }
+
+    /**
+     * Get metadata for a file
+     *
+     * @param string
+     * @return array
+     */
+    public function getMetadata($file) {
+        return $this->_getFilesystem()->getWithMetadata($this->getRelativeDestination($file));
     }
 
     /**
