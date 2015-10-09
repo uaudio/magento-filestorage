@@ -174,6 +174,12 @@ class Uaudio_Storage_Model_Catalog_Product_Image extends Mage_Catalog_Model_Prod
         return $this->_getStorageModel()->fileExists($filename);
     }
 
+    /**
+     * Get memory needed to perform image manipulations on the file
+     *
+     * @param string
+     * @return int
+     */
     protected function _getNeedMemoryForFile($file = null) {
         if(!Mage::helper('uaudio_storage')->isEnabled()) {
             return parent::_getNeedMemoryForFile($file);
@@ -189,7 +195,17 @@ class Uaudio_Storage_Model_Catalog_Product_Image extends Mage_Catalog_Model_Prod
         }
 
         if($this->_getStorageModel()->isInMedia($file)) {
-            $imageInfo = getimagesize($this->_getFileFromStorage($file));
+            $metadata = $this->_getStorageModel()->getMetadata($file);
+            if(!isset($metadata['width'])) {
+                $imageInfo = getimagesize($this->_getFileFromStorage($file));
+                $this->_getStorageModel()->updateMetadata($file, [
+                    'width' => $imageInfo[0],
+                    'height' => $imageInfo[1],
+                ]);
+            } else {
+                $imageInfo[0] = $metadata['width'];
+                $imageInfo[1] = $metadata['height'];
+            }
         } else {
             $imageInfo = getimagesize($file);
         }
