@@ -107,4 +107,17 @@ class Uaudio_Storage_Model_Storage_S3 extends Uaudio_Storage_Model_Storage_Abstr
         return $destinationFile;
     }
 
+    /**
+     * Update file metadata
+     *
+     * @param string
+     * @param array
+     * @return self
+     */
+    public function updateMetadata($file, $metadata) {
+        if($this->isInMedia($file) && $this->fileExists($file)) {
+            $this->_getAdapter()->updateMetadata($this->getRelativeDestination($file), $metadata);
+        }
+        return $this;
+    }
 }

@@ -6,7 +6,7 @@ use League\Flysystem\Util;
 use League\Flysystem\Config;
 
 /**
- * Extend adapter to add image size to S3 metadata
+ * Extend AWS adapter to add image size to S3 metadata
  *
  * @category    Uaudio
  * @package     Uaudio_Storage
@@ -34,8 +34,8 @@ class Uaudio_Storage_Model_League_AwsS3Adapter extends AwsS3Adapter {
                 'CopySource' => $this->bucket.DS.$key,
                 'ContentType' => $return['mimetype'],
                 'Metadata' => [
-                    'x-amz-meta-width' => $size[0],
-                    'x-amz-meta-height' => $size[1],
+                    'width' => $size[0],
+                    'height' => $size[1],
                 ],
                 'MetadataDirective' => 'REPLACE',
                 'Key' => $key,
@@ -52,11 +52,31 @@ class Uaudio_Storage_Model_League_AwsS3Adapter extends AwsS3Adapter {
      * @return array
      */
     protected function normalizeResponse(array $response, $path = null) {
-        $map = [
-            'x-amz-meta-width' => 'width',
-            'x-amz-meta-height' => 'height',
-        ];
-        $result = array_merge(parent::normalizeResponse($response, $path), Util::map($response['Metadata'], $map));
+        $result = parent::normalizeResponse($response, $path);
+        if(is_array($response['Metadata'])) {
+            $result = array_merge($result, $response['Metadata']);
+        }
         return $result;
+    }
+
+    /**
+     * Add metadata to S3 object
+     *
+     * @param string
+     * @param array
+     */
+    public function updateMetadata($file, $metadata) {
+        $removeKeys = array_flip(['path', 'dirname', 'basename', 'extension', 'filename', 'timestamp', 'size', 'mimetype', 'type']);
+        $meta = $this->getMetadata($file);
+        $key = $this->applyPathPrefix($file);
+        $metadata = array_merge(array_diff_key($meta, $removeKeys), $metadata);
+        $this->s3Client->copyObject([
+            'Bucket' => $this->bucket,
+            'CopySource' => $this->bucket.DS.$key,
+            'ContentType' => $meta['mimetype'],
+            'Metadata' => $metadata,
+            'MetadataDirective' => 'REPLACE',
+            'Key' => $key,
+        ]);
     }
 }

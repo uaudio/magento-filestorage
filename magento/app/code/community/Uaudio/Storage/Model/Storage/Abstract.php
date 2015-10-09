@@ -210,6 +210,10 @@ abstract class Uaudio_Storage_Model_Storage_Abstract extends Mage_Core_Model_Fil
         return $this->_getFilesystem()->getMimetype($this->getRelativeDestination($file));
     }
 
+    public function updateMetadata($file, $metadata) {
+        return $this;
+    }
+
     /**
      * Get metadata for a file
      *
@@ -217,7 +221,11 @@ abstract class Uaudio_Storage_Model_Storage_Abstract extends Mage_Core_Model_Fil
      * @return array
      */
     public function getMetadata($file) {
-        return $this->_getFilesystem()->getWithMetadata($this->getRelativeDestination($file));
+        if($this->isInMedia($file) && $this->fileExists($file)) {
+            return $this->_getFilesystem()->getWithMetadata($this->getRelativeDestination($file), []);
+        } else {
+            return [];
+        }
     }
 
     /**
