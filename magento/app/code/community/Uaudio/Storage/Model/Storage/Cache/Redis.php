@@ -10,7 +10,7 @@ require_once('Uaudio/vendor/autoload.php');
  */
 class Uaudio_Storage_Model_Storage_Cache_Redis extends League\Flysystem\Cached\Storage\AbstractCache {
 
-    protected $key = 'flysystem';
+    protected $key = 'file_storage';
 
     /**
      * Load the cache
