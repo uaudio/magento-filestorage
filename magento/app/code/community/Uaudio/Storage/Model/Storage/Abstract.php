@@ -114,6 +114,7 @@ abstract class Uaudio_Storage_Model_Storage_Abstract extends Mage_Core_Model_Fil
             switch($options['backend']) {
                 case 'Cm_Cache_Backend_Redis':
                     $this->_cache = new Uaudio_Storage_Model_Storage_Cache_Redis();
+                    $this->_cache->setAutosave(false);
             }
         }
         return $this->_cache;
