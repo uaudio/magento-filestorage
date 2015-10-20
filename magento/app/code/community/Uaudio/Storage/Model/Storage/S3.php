@@ -2,6 +2,7 @@
 require_once('Uaudio/vendor/autoload.php');
 use Aws\S3\S3Client;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
+use League\Flysystem\Util;
 
 /**
  * Amazon S3 storage model
@@ -87,24 +88,6 @@ class Uaudio_Storage_Model_Storage_S3 extends Uaudio_Storage_Model_Storage_Abstr
             $this->_adapter = new Uaudio_Storage_Model_League_AwsS3Adapter($client, $this->_bucket, $this->_folder);
         }
         return $this->_adapter;
-    }
-
-    /**
-     * Move an upload file to storage
-     *
-     * @param string
-     * @param string
-     * @return string
-     */
-    public function moveUploadFile($uploadFile, $destinationFile) {
-        $destinationFile = $this->getRelativeDestination($destinationFile);
-        if($this->getAllowRenameFiles()) {
-            $destinationFile = $this->_getNewDestinationFile($destinationFile);
-        }
-
-        // using streams seems more memory friendly but S3 doesn't set the meta data properly
-        $this->_getFilesystem()->put($destinationFile, file_get_contents($uploadFile));
-        return $destinationFile;
     }
 
     /**
