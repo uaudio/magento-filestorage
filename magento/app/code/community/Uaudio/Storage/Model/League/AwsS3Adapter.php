@@ -3,6 +3,7 @@ require_once('Uaudio/vendor/autoload.php');
 use Aws\S3\S3Client;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use League\Flysystem\Util;
+use League\Flysystem\Util\MimeType;
 use League\Flysystem\Config;
 
 /**
@@ -25,14 +26,17 @@ class Uaudio_Storage_Model_League_AwsS3Adapter extends AwsS3Adapter {
      */
     protected function upload($path, $body, Config $config) {
         $key = $this->applyPathPrefix($path);
+        $mimetype = MimeType::detectByFileExtension(pathinfo($path, PATHINFO_EXTENSION));
+        $config->set('mimetype', $mimetype);
 
         $return = parent::upload($path, $body, $config);
-        if(function_exists('getimagesizefromstring')) {
+
+        if(function_exists('getimagesizefromstring') && strpos($mimetype, 'image')!==false) {
             $size = getimagesizefromstring($body);
             $this->s3Client->copyObject([
                 'Bucket' => $this->bucket,
                 'CopySource' => $this->bucket.DS.$key,
-                'ContentType' => $return['mimetype'],
+                'ContentType' => $mimetype,
                 'Metadata' => [
                     'width' => $size[0],
                     'height' => $size[1],
