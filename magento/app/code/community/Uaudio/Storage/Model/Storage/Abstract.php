@@ -88,11 +88,18 @@ abstract class Uaudio_Storage_Model_Storage_Abstract extends Mage_Core_Model_Fil
      */
     protected function _getFilesystem() {
         if(!$this->_filesystem) {
-            if(Mage::app()->useCache('file_storage') && ($cache = $this->_getCache()) && !$this->getNoCache()) {
-                $adapter = new CachedAdapter($this->_getAdapter(), $cache);
-            } else {
-                $cacheStore = new CacheStore();
-                $adapter = new CachedAdapter($this->_getAdapter(), $cacheStore);
+            try {
+                if(Mage::app()->useCache('file_storage') && ($cache = $this->_getCache()) && !$this->getNoCache()) {
+                    $adapter = new CachedAdapter($this->_getAdapter(), $cache);
+                } else {
+                    $cacheStore = new CacheStore();
+                    $adapter = new CachedAdapter($this->_getAdapter(), $cacheStore);
+                }
+            } catch (Exception $e) {
+                // catch adapter errors and default to using local adapter with media directory
+                Mage::logException($e);
+                $this->_adapter = new \League\Flysystem\Adapter\Local(Mage::getBaseDir('media'));
+                $adapter = $this->_adapter;
             }
             $this->_filesystem = new Filesystem($adapter);
             $this->_filesystem->addPlugin(new League\Flysystem\Plugin\GetWithMetadata());
