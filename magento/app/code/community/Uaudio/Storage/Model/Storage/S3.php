@@ -76,11 +76,8 @@ class Uaudio_Storage_Model_Storage_S3 extends Uaudio_Storage_Model_Storage_Abstr
                 'version' => '2006-03-01',
             ];
 
-            if($this->_key) {
+            if($this->_key && $this->_secret) {
                 $config['credentials']['key'] = $this->_key;
-            }
-
-            if($this->_secret) {
                 $config['credentials']['secret'] = $this->_secret;
             }
 
