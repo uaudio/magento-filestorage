@@ -1,5 +1,5 @@
 <?php
-require_once('Uaudio/vendor/autoload.php');
+require_once('vendor/autoload.php');
 use League\Flysystem\Filesystem;
 use League\Flysystem\Cached\CachedAdapter;
 use League\Flysystem\Cached\Storage\Memory as CacheStore;

@@ -1,5 +1,5 @@
 <?php
-require_once('Uaudio/vendor/autoload.php');
+require_once('vendor/autoload.php');
 
 /**
  * Flysystem redis cache using magento cache settings

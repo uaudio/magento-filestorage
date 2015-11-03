@@ -1,5 +1,5 @@
 <?php
-require_once('Uaudio/vendor/autoload.php');
+require_once('vendor/autoload.php');
 use Aws\S3\S3Client;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use League\Flysystem\Util;
