@@ -107,6 +107,17 @@
             </adminhtml_cache_refresh_type>
         </events>
     </adminhtml>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <uaudio_storage before="Mage_Adminhtml">Uaudio_Storage_Adminhtml</uaudio_storage>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
     <default>
         <system>
             <media_storage_configuration>
