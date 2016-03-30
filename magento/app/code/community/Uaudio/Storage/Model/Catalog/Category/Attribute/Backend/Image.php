@@ -34,6 +34,15 @@ class Uaudio_Storage_Model_Catalog_Category_Attribute_Backend_Image extends Mage
             $uploader = new Mage_Core_Model_File_Uploader($this->getAttribute()->getName());
             $uploader->setAllowedExtensions(array('jpg','jpeg','gif','png'));
             $uploader->setAllowRenameFiles(true);
+
+            if(class_exists('Mage_Core_Model_File_Validator_Image')) {
+                // added for mage patch SUPEE-7405
+                $uploader->addValidateCallback(
+                    Mage_Core_Model_File_Validator_Image::NAME,
+                    new Mage_Core_Model_File_Validator_Image(),
+                    "validate"
+                );
+            }
             $result = $uploader->save($path);
 
             $object->setData($this->getAttribute()->getName(), $result['file']);

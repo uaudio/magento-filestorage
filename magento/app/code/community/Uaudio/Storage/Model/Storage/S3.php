@@ -88,6 +88,15 @@ class Uaudio_Storage_Model_Storage_S3 extends Uaudio_Storage_Model_Storage_Abstr
     }
 
     /**
+     * Get S3 client adapter
+     *
+     * @return
+     */
+    protected function _getClient() {
+        return $this->_getAdapter()->getClient();
+    }
+
+    /**
      * Update file metadata
      *
      * @param string
@@ -99,5 +108,21 @@ class Uaudio_Storage_Model_Storage_S3 extends Uaudio_Storage_Model_Storage_Abstr
             $this->_getAdapter()->updateMetadata($this->getRelativeDestination($file), $metadata);
         }
         return $this;
+    }
+
+    /**
+     * Create a presigned URL for S3
+     *
+     * @param string
+     * @param int (expire link in X minutes)
+     * @return string
+     */
+    public function getPresignedUrl($file, $expire=20) {
+        $cmd = $this->_getClient()->getCommand('GetObject', [
+            'Bucket' => $this->_bucket,
+            'Key' => $this->getRelativeDestination($file),
+        ]);
+        $request = $this->_getClient()->createPresignedRequest($cmd, "+$expire minutes");
+        return (string)$request->getUri();
     }
 }
