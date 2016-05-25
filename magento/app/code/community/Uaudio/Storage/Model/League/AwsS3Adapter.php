@@ -31,8 +31,8 @@ class Uaudio_Storage_Model_League_AwsS3Adapter extends AwsS3Adapter {
 
         $return = parent::upload($path, $body, $config);
 
-        if(function_exists('getimagesizefromstring') && strpos($mimetype, 'image')!==false) {
-            $size = getimagesizefromstring($body);
+        if(strpos($mimetype, 'image')!==false) {
+            $size = $return['size'];
             $this->s3Client->copyObject([
                 'Bucket' => $this->bucket,
                 'CopySource' => $this->bucket.DS.$key,
