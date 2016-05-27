@@ -32,7 +32,12 @@ class Uaudio_Storage_Model_League_AwsS3Adapter extends AwsS3Adapter {
         $return = parent::upload($path, $body, $config);
 
         if(function_exists('getimagesizefromstring') && strpos($mimetype, 'image')!==false) {
-            $size = getimagesizefromstring($body);
+            if(is_resource($body)) {
+                rewind($body);
+                $size = getimagesizefromstring(stream_get_contents($body));
+            } else {
+                $size = getimagesizefromstring($body);
+            }
             $this->s3Client->copyObject([
                 'Bucket' => $this->bucket,
                 'CopySource' => $this->bucket.DS.$key,
@@ -57,7 +62,7 @@ class Uaudio_Storage_Model_League_AwsS3Adapter extends AwsS3Adapter {
      */
     protected function normalizeResponse(array $response, $path = null) {
         $result = parent::normalizeResponse($response, $path);
-        if(is_array($response['Metadata'])) {
+        if(isset($response['Metadata']) && is_array($response['Metadata'])) {
             $result = array_merge($result, $response['Metadata']);
         }
         return $result;
