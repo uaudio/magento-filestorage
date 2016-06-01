@@ -120,7 +120,7 @@ class Uaudio_Storage_Model_Storage_S3 extends Uaudio_Storage_Model_Storage_Abstr
     public function getPresignedUrl($file, $expire=20) {
         $cmd = $this->_getClient()->getCommand('GetObject', [
             'Bucket' => $this->_bucket,
-            'Key' => $this->getRelativeDestination($file),
+            'Key' => ($this->_folder ? $this->_folder.DS : '').$this->getRelativeDestination($file),
         ]);
         $request = $this->_getClient()->createPresignedRequest($cmd, "+$expire minutes");
         return (string)$request->getUri();
