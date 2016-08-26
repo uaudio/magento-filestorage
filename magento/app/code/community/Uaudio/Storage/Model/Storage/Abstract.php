@@ -335,6 +335,17 @@ abstract class Uaudio_Storage_Model_Storage_Abstract extends Mage_Core_Model_Fil
     }
 
     /**
+     * Write contents to a file
+     *
+     * @param string
+     * @param string
+     * @return boolean
+     */
+    public function put($filePath, $contents) {
+        return $this->_getFilesystem()->put($this->getRelativeDestination($filePath), $contents);
+    }
+
+    /**
      * Copy files in storage
      *
      * @param  string $oldFilePath
