@@ -27,7 +27,7 @@ class Uaudio_Storage_Model_League_AwsS3Adapter extends AwsS3Adapter {
     protected function upload($path, $body, Config $config) {
         $key = $this->applyPathPrefix($path);
         $mimetype = MimeType::detectByFileExtension(pathinfo($path, PATHINFO_EXTENSION));
-        if (isset($this->options['cachecontrol'])) $cachecontrol = 'max-age='.$this->options['cachecontrol'].', public';
+        if (isset($this->options['cachecontrol'])) $cachecontrol = 'max-age='.$this->options['cachecontrol'];
         $config->set('mimetype', $mimetype);
 
         $return = parent::upload($path, $body, $config);
