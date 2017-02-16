@@ -59,10 +59,20 @@
                             <show_in_store>0</show_in_store>
                             <depends><media_storage>2</media_storage></depends>
                         </media_s3_folder>
+                        <media_s3_cachecontrol translate="label">
+                            <label>Cache Control Duration</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>205</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends><media_storage>2</media_storage></depends>
+                            <comment>Duration (in seconds) before the content expires</comment>
+                        </media_s3_cachecontrol>
                         <media_local_folder>
                             <label>Folder</label>
                             <frontend_type>text</frontend_type>
-                            <sort_order>205</sort_order>
+                            <sort_order>206</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>

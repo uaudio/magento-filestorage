@@ -36,6 +36,11 @@ class Uaudio_Storage_Model_Storage_S3 extends Uaudio_Storage_Model_Storage_Abstr
     protected $_bucket;
 
     /**
+     * @var Cache Control
+     */
+    protected $_cachecontrol;
+
+    /**
      * Initialize S3 settings
      *
      * @param array - allow settings override during synchronization
@@ -46,6 +51,7 @@ class Uaudio_Storage_Model_Storage_S3 extends Uaudio_Storage_Model_Storage_Abstr
         $this->_region = isset($settings['s3_region'])? $settings['s3_region'] : Mage::getStoreConfig('system/media_storage_configuration/media_s3_region');
         $this->_bucket = isset($settings['s3_bucket']) ? $settings['s3_bucket'] : Mage::getStoreConfig('system/media_storage_configuration/media_s3_bucket');
         $this->_folder = isset($settings['s3_folder']) ? $settings['s3_folder'] : Mage::getStoreConfig('system/media_storage_configuration/media_s3_folder');
+        //$this->_cachecontrol = isset($settings['s3_cachecontrol']) ? $settings['s3_cachecontrol'] : Mage::getStoreConfig('system/media_storage_configuration/media_s3_cachecontrol');
         parent::__construct();
     }
 
@@ -60,7 +66,8 @@ class Uaudio_Storage_Model_Storage_S3 extends Uaudio_Storage_Model_Storage_Abstr
             's3_secret_key' => 'Secret Key',
             's3_region'     => 'Region',
             's3_bucket'     => 'Bucket',
-            's3_folder'     => 'Folder (optional)'
+            's3_folder'     => 'Folder (optional)',
+            's3_cachecontrol'     => 'Cache Control (optional)'
         ];
     }
 
@@ -82,7 +89,7 @@ class Uaudio_Storage_Model_Storage_S3 extends Uaudio_Storage_Model_Storage_Abstr
             }
 
             $client = S3Client::factory($config);
-            $this->_adapter = new Uaudio_Storage_Model_League_AwsS3Adapter($client, $this->_bucket, $this->_folder);
+            $this->_adapter = new Uaudio_Storage_Model_League_AwsS3Adapter($client, $this->_bucket, $this->_folder, ['cachecontrol' => $this->_cachecontrol]);
         }
         return $this->_adapter;
     }
