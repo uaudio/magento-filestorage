@@ -51,7 +51,7 @@ class Uaudio_Storage_Model_Storage_S3 extends Uaudio_Storage_Model_Storage_Abstr
         $this->_region = isset($settings['s3_region'])? $settings['s3_region'] : Mage::getStoreConfig('system/media_storage_configuration/media_s3_region');
         $this->_bucket = isset($settings['s3_bucket']) ? $settings['s3_bucket'] : Mage::getStoreConfig('system/media_storage_configuration/media_s3_bucket');
         $this->_folder = isset($settings['s3_folder']) ? $settings['s3_folder'] : Mage::getStoreConfig('system/media_storage_configuration/media_s3_folder');
-        //$this->_cachecontrol = isset($settings['s3_cachecontrol']) ? $settings['s3_cachecontrol'] : Mage::getStoreConfig('system/media_storage_configuration/media_s3_cachecontrol');
+        $this->_cachecontrol = isset($settings['s3_cachecontrol']) ? $settings['s3_cachecontrol'] : Mage::getStoreConfig('system/media_storage_configuration/media_s3_cachecontrol');
         parent::__construct();
     }
 
