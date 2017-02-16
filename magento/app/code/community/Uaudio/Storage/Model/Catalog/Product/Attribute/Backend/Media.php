@@ -139,7 +139,7 @@ class Uaudio_Storage_Model_Catalog_Product_Attribute_Backend_Media extends Mage_
                 throw new Exception();
             }
 
-            $destFile = $this->getLocalDestination($storageModel->copyFile($filePath, $filePath));
+            $destFile = $storageModel->getLocalDestination($storageModel->copyFile($filePath, $filePath));
 
         } catch (Exception $e) {
             $file = $this->_getConfig()->getMediaPath($file);
