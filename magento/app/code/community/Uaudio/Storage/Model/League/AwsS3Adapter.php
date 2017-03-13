@@ -31,7 +31,7 @@ class Uaudio_Storage_Model_League_AwsS3Adapter extends AwsS3Adapter {
         $config->set('mimetype', $mimetype);
 
         $return = parent::upload($path, $body, $config);
-
+        $metadata = [];
         if(function_exists('getimagesizefromstring') && strpos($mimetype, 'image')!==false) {
             if(is_resource($body)) {
                 rewind($body);
@@ -39,18 +39,23 @@ class Uaudio_Storage_Model_League_AwsS3Adapter extends AwsS3Adapter {
             } else {
                 $size = getimagesizefromstring($body);
             }
-            $this->s3Client->copyObject([
+            $metadata = [
+                'Metadata' => [
+                    'width' => $size[0],
+                    'height' => $size[1]
+                ]
+            ];
+        }
+        if(isset($metadata['Metadata']) || isset($this->options['cachecontrol'])) {
+            $copy = array_merge([
                 'Bucket' => $this->bucket,
                 'CopySource' => $this->bucket.DS.$key,
                 'ContentType' => $mimetype,
                 'CacheControl' => $cachecontrol,
-                'Metadata' => [
-                    'width' => $size[0],
-                    'height' => $size[1],
-                ],
-                'MetadataDirective' => 'REPLACE',
                 'Key' => $key,
-            ]);
+                'MetadataDirective' => 'REPLACE'
+                ], $metadata);
+            $this->s3Client->copyObject($copy);
         }
         return $return;
     }
