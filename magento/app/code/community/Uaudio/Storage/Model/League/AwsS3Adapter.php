@@ -27,7 +27,6 @@ class Uaudio_Storage_Model_League_AwsS3Adapter extends AwsS3Adapter {
     protected function upload($path, $body, Config $config) {
         $key = $this->applyPathPrefix($path);
         $mimetype = MimeType::detectByFileExtension(pathinfo($path, PATHINFO_EXTENSION));
-        if (isset($this->options['cachecontrol'])) $cachecontrol = 'max-age='.$this->options['cachecontrol'].', public';
         $config->set('mimetype', $mimetype);
 
         $return = parent::upload($path, $body, $config);
@@ -46,17 +45,18 @@ class Uaudio_Storage_Model_League_AwsS3Adapter extends AwsS3Adapter {
                 ]
             ];
         }
-        if(isset($metadata['Metadata']) || isset($this->options['cachecontrol'])) {
-            $copy = array_merge([
-                'Bucket' => $this->bucket,
-                'CopySource' => $this->bucket.DS.$key,
-                'ContentType' => $mimetype,
-                'CacheControl' => $cachecontrol,
-                'Key' => $key,
-                'MetadataDirective' => 'REPLACE'
-                ], $metadata);
-            $this->s3Client->copyObject($copy);
+        $copyArray = array_merge([
+            'Bucket' => $this->bucket,
+            'CopySource' => $this->bucket.DS.$key,
+            'ContentType' => $mimetype,
+            'Key' => $key,
+            'MetadataDirective' => 'REPLACE'
+        ], $metadata);
+        if(isset($this->options['cachecontrol'])) {
+            $cachecontrol = 'max-age='.$this->options['cachecontrol'].', public';
+            $copyArray['CacheControl'] = $cachecontrol;
         }
+        $this->s3Client->copyObject($copyArray);
         return $return;
     }
 
@@ -86,13 +86,18 @@ class Uaudio_Storage_Model_League_AwsS3Adapter extends AwsS3Adapter {
         $meta = $this->getMetadata($file);
         $key = $this->applyPathPrefix($file);
         $metadata = array_merge(array_diff_key($meta, $removeKeys), $metadata);
-        $this->s3Client->copyObject([
+        $copyArray = [
             'Bucket' => $this->bucket,
             'CopySource' => $this->bucket.DS.$key,
             'ContentType' => $meta['mimetype'],
             'Metadata' => $metadata,
             'MetadataDirective' => 'REPLACE',
-            'Key' => $key,
-        ]);
+            'Key' => $key
+        ];
+        if (isset($this->options['cachecontrol'])) {
+            $cachecontrol = 'max-age='.$this->options['cachecontrol'].', public';
+            $copyArray['CacheControl'] = $cachecontrol;
+        }
+        $this->s3Client->copyObject($copyArray);
     }
 }
