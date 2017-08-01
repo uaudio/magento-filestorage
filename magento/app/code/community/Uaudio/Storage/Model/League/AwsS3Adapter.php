@@ -82,15 +82,14 @@ class Uaudio_Storage_Model_League_AwsS3Adapter extends AwsS3Adapter {
      * @param array
      */
     public function updateMetadata($file, $metadata) {
-        $removeKeys = array_flip(['path', 'dirname', 'basename', 'extension', 'filename', 'timestamp', 'size', 'mimetype', 'type']);
         $meta = $this->getMetadata($file);
         $key = $this->applyPathPrefix($file);
-        $metadata = array_merge(array_diff_key($meta, $removeKeys), $metadata);
+        $metadata = array_merge($meta['metadata'], $metadata);
         $copyArray = [
             'Bucket' => $this->bucket,
             'CopySource' => $this->bucket.DS.$key,
             'ContentType' => $meta['mimetype'],
-            'Metadata' => $metadata,
+            'Metadata' => ['metadata' => json_encode($metadata)],
             'MetadataDirective' => 'REPLACE',
             'Key' => $key
         ];
