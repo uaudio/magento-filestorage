@@ -113,7 +113,7 @@ class Uaudio_Storage_Model_Core_Design_Package extends Mage_Core_Model_Design_Pa
         // merge into target file
         $string = null;
         foreach($files as $file) {
-            $string .= md5_file($file);
+            if (file_exists($file)) $string .= md5_file($file);
         }
         $targetFilename = md5($string."|{$hostname}|{$port}").'.css';
 
