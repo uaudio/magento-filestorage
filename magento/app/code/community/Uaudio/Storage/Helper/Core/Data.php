@@ -1,5 +1,9 @@
 <?php
 
+if (!class_exists('Inchoo_PHP7_Helper_Data')) {
+    class Inchoo_PHP7_Helper_Data extends Mage_Core_Helper_Data {}
+}
+
 /**
  * Core data helper
  *
@@ -7,7 +11,7 @@
  * @package     Uaudio_Storage
  * @author      Universal Audio <web-dev@uaudio.com>
  */
-class Uaudio_Storage_Helper_Core_Data extends Mage_Core_Helper_Data {
+class Uaudio_Storage_Helper_Core_Data extends Inchoo_PHP7_Helper_Data {
 
     /**
      * Merge specified files into one
