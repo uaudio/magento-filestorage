@@ -35,7 +35,7 @@ abstract class Uaudio_Storage_Model_Storage_Abstract extends Mage_Core_Model_Fil
 
     /**
      * @var array
-     */ 
+     */
     protected $_errors = [];
 
     /**
@@ -241,7 +241,7 @@ abstract class Uaudio_Storage_Model_Storage_Abstract extends Mage_Core_Model_Fil
      *
      * @param string
      * @param string
-     * @return string
+     * @return string|false
      */
     public function moveUploadFile($uploadFile, $destinationFile) {
         $destinationFile = $this->getRelativeDestination($destinationFile);
@@ -249,11 +249,14 @@ abstract class Uaudio_Storage_Model_Storage_Abstract extends Mage_Core_Model_Fil
             $destinationFile = $this->_getNewDestinationFile($destinationFile);
         }
         $stream = fopen($uploadFile, 'r+');
-        $this->_getFilesystem()->putStream($destinationFile, $stream);
+        $result = $this->_getFilesystem()->putStream($destinationFile, $stream);
+        if(!$result) {
+            Mage::logException(new Exception("Error uploading file $destinationFile"));
+        }
         if(is_resource($stream)) {
             fclose($stream); // this is creating a not valid stream resource error somehow?
         }
-        return $destinationFile;
+        return $result ? $destinationFile : false;
     }
 
     /**
@@ -261,7 +264,7 @@ abstract class Uaudio_Storage_Model_Storage_Abstract extends Mage_Core_Model_Fil
      *
      * @param string
      * @param string
-     * @param string
+     * @param string|false
      */
     public function moveFile($localFile, $destinationFile) {
         $destinationFile = $this->moveUploadFile($localFile, $destinationFile);
@@ -366,11 +369,10 @@ abstract class Uaudio_Storage_Model_Storage_Abstract extends Mage_Core_Model_Fil
      * Store file into storage keeping local version
      *
      * @param  string
-     * @return self
+     * @return string|false
      */
     public function saveFile($filename) {
-        $this->moveUploadFile($filename, $filename);
-        return $this;
+        return $this->moveUploadFile($filename, $filename);
     }
 
     /**
@@ -465,7 +467,7 @@ abstract class Uaudio_Storage_Model_Storage_Abstract extends Mage_Core_Model_Fil
     public function importDirectories($dirs) {
         return $this;
     }
-    
+
     /**
      * Have we had errors during synchronization
      *
@@ -554,7 +556,7 @@ abstract class Uaudio_Storage_Model_Storage_Abstract extends Mage_Core_Model_Fil
                 $index ++;
             }
             $destFile = $fileInfo['dirname'] . DIRECTORY_SEPARATOR . $baseName;
-        } 
+        }
 
         return $destFile;
     }

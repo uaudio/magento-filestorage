@@ -61,10 +61,13 @@ class Uaudio_Storage_Model_Core_Design_Package extends Mage_Core_Model_Design_Pa
 
         if ($result) {
             $size = filesize($targetFile);
-            $storageModel->moveFile($targetFile, $targetFile);
-            if($size != $storageModel->getSize($targetFile)) {
-                $storageModel->deleteFile($targetFile);
-                Mage::throwException(sprintf("File size does not match [file: %s]", $storageModel->getRelativeDestination($targetFile)));
+            if($storageModel->moveFile($targetFile, $targetFile)) {
+                if($size != $storageModel->getSize($targetFile)) {
+                    $storageModel->deleteFile($targetFile);
+                    Mage::throwException(sprintf("File size does not match [file: %s]", $storageModel->getRelativeDestination($targetFile)));
+                }
+            } else {
+                Mage::throwException("Unable to upload file $targetFile");
             }
         }
         return $result;

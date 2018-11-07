@@ -15,7 +15,7 @@ class Uaudio_Storage_Model_Catalog_Product_Attribute_Backend_Media extends Mage_
      * @param string $file
      * @return string
      */
-    protected function _moveImageFromTmp($file) { 
+    protected function _moveImageFromTmp($file) {
         if(!Mage::helper('uaudio_storage')->isEnabled()) {
             return parent::_moveImageFromTmp($file);
         }
@@ -76,7 +76,7 @@ class Uaudio_Storage_Model_Catalog_Product_Attribute_Backend_Media extends Mage_
             } else {
                 $uploadDestination = $storageModel->moveUploadFile($file, $dest);
             }
-            if(!$uploadDestination) throw new Exception();
+            if(!$uploadDestination) Mage::throwException("There was an error upload file $file");
 
             $fileName = basename($uploadDestination);
             $dispretionPath = Mage_Core_Model_File_Uploader::getDispretionPath($fileName);
