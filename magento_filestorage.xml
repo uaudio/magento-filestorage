@@ -1,5 +1,5 @@
 <_>
-   <form_key>tGooXEjnswRieGdj</form_key>
+   <form_key>1J8xZfozMOZEeLVC</form_key>
    <name>magento_filestorage</name>
    <channel>community</channel>
    <version_ids>
@@ -24,7 +24,7 @@
       </email>
    </authors>
    <depends_php_min>5.5.0.</depends_php_min>
-   <depends_php_max>7.2.0.</depends_php_max>
+   <depends_php_max>7.9.0.</depends_php_max>
    <depends>
       <package>
          <name>
@@ -40,7 +40,7 @@
             <max/>
          </max>
          <files>
-            <files>                  </files>
+            <files>                   </files>
          </files>
       </package>
       <extension>
