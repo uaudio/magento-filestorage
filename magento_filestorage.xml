@@ -1,5 +1,5 @@
 <_>
-   <form_key>1J8xZfozMOZEeLVC</form_key>
+   <form_key>tem0H6vLvUUdbZcE</form_key>
    <name>magento_filestorage</name>
    <channel>community</channel>
    <version_ids>
@@ -9,7 +9,7 @@
    <description>Magento File Storage is an extension that lets you use different storage backends for your magento media.</description>
    <license>OSL</license>
    <license_uri/>
-   <version>0.1.22</version>
+   <version>0.1.23</version>
    <stability>beta</stability>
    <notes>After installing the module go to app/code/community/Uaudio and run composer install.</notes>
    <authors>
@@ -40,7 +40,7 @@
             <max/>
          </max>
          <files>
-            <files>                   </files>
+            <files>                    </files>
          </files>
       </package>
       <extension>
