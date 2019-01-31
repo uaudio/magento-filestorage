@@ -8,8 +8,9 @@
  * @author      Universal Audio <web-dev@uaudio.com>
  */
 class Uaudio_Storage_Model_Catalog_Product_Image extends Mage_Catalog_Model_Product_Image {
-    
+
     protected $_fileName;
+    protected $_fileExists = [];
 
     /**
      * Get file storage model
@@ -48,6 +49,7 @@ class Uaudio_Storage_Model_Catalog_Product_Image extends Mage_Catalog_Model_Prod
             // check if cached file already exists
             if($this->_fileExists(implode('/', $path) . $file)) {
                 $this->_newFile = implode('/', $path) . $file;
+                return $this;
             } else if ((!$this->_fileExists($baseDir . $file)) || !$this->_checkMemory($baseDir . $file)) {
                 $file = null;
             }
@@ -158,7 +160,7 @@ class Uaudio_Storage_Model_Catalog_Product_Image extends Mage_Catalog_Model_Prod
         $path[] = md5(implode('_', $miscParams));
         return $path;
     }
-    
+
     /**
      * First check this file on FS
      * If it doesn't exist - try to download it from DB
@@ -170,8 +172,10 @@ class Uaudio_Storage_Model_Catalog_Product_Image extends Mage_Catalog_Model_Prod
         if(!Mage::helper('uaudio_storage')->isEnabled()) {
             return parent::_fileExists($filename);
         }
-
-        return $this->_getStorageModel()->fileExists($filename);
+        if(!isset($this->_fileExists[$filename])) {
+            $this->_fileExists[$filename] = $this->_getStorageModel()->fileExists($filename);
+        }
+        return $this->_fileExists[$filename];
     }
 
     /**
