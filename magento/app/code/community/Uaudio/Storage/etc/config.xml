@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Uaudio_Storage>
-            <version>0.1.23</version>
+            <version>0.1.24</version>
         </Uaudio_Storage>
     </modules>
     <global>

@@ -9,7 +9,7 @@
    <description>Magento File Storage is an extension that lets you use different storage backends for your magento media.</description>
    <license>OSL</license>
    <license_uri/>
-   <version>0.1.23</version>
+   <version>0.1.24</version>
    <stability>beta</stability>
    <notes>After installing the module go to app/code/community/Uaudio and run composer install.</notes>
    <authors>
@@ -40,7 +40,7 @@
             <max/>
          </max>
          <files>
-            <files>                   </files>
+            <files>                     </files>
          </files>
       </package>
       <extension>
@@ -102,8 +102,4 @@
          <ignore/>
       </ignore>
    </contents>
-   <page>1</page>
-   <limit>200</limit>
-   <folder/>
-   <package/>
 </_>
