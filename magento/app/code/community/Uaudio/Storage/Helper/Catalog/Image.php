@@ -23,6 +23,8 @@ class Uaudio_Storage_Helper_Catalog_Image extends Mage_Catalog_Helper_Image {
      */
     protected $_originalHeight = null;
 
+    protected $_baseFileSet = false;
+
     /**
      * Reset all previous data
      *
@@ -31,9 +33,43 @@ class Uaudio_Storage_Helper_Catalog_Image extends Mage_Catalog_Helper_Image {
     protected function _reset() {
         $this->_originalWidth = null;
         $this->_originalHeight = null;
+        $this->_baseFileSet = false;
         return parent::_reset();
     }
-    
+
+    /**
+     * Initialize Helper to work with Image
+     *
+     * @param Mage_Catalog_Model_Product $product
+     * @param string $attributeName
+     * @param mixed $imageFile
+     * @return Mage_Catalog_Helper_Image
+     */
+    public function init(Mage_Catalog_Model_Product $product, $attributeName, $imageFile=null) {
+        $this->_reset();
+        $this->_setModel(Mage::getModel('catalog/product_image'));
+        $this->_getModel()->setDestinationSubdir($attributeName);
+        $this->setProduct($product);
+
+        $this->setWatermark(
+            Mage::getStoreConfig("design/watermark/{$this->_getModel()->getDestinationSubdir()}_image")
+        );
+        $this->setWatermarkImageOpacity(
+            Mage::getStoreConfig("design/watermark/{$this->_getModel()->getDestinationSubdir()}_imageOpacity")
+        );
+        $this->setWatermarkPosition(
+            Mage::getStoreConfig("design/watermark/{$this->_getModel()->getDestinationSubdir()}_position")
+        );
+        $this->setWatermarkSize(
+            Mage::getStoreConfig("design/watermark/{$this->_getModel()->getDestinationSubdir()}_size")
+        );
+
+        if ($imageFile) {
+            $this->setImageFile($imageFile);
+        }
+        return $this;
+    }
+
     /**
      * Retrieve original image width
      *
@@ -41,6 +77,10 @@ class Uaudio_Storage_Helper_Catalog_Image extends Mage_Catalog_Helper_Image {
      */
     public function getOriginalWidth() {
         if($this->_originalWidth) return $this->_originalWidth;
+        if(!$this->_baseFileSet) {
+            $this->_getModel()->setBaseFile($this->getProduct()->getData($this->_getModel()->getDestinationSubdir()));
+            $this->_baseFileSet = true;
+        }
 
         if(!Mage::helper('uaudio_storage')->isEnabled()) {
             return parent::getOriginalWidth();
@@ -63,6 +103,10 @@ class Uaudio_Storage_Helper_Catalog_Image extends Mage_Catalog_Helper_Image {
      */
     public function getOriginalHeight() {
         if($this->_originalHeight) return $this->_originalHeight;
+        if(!$this->_baseFileSet) {
+            $this->_getModel()->setBaseFile($this->getProduct()->getData($this->_getModel()->getDestinationSubdir()));
+            $this->_baseFileSet = true;
+        }
 
         if(!Mage::helper('uaudio_storage')->isEnabled()) {
             return parent::getOriginalHeight();
