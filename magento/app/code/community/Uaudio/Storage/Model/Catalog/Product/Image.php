@@ -49,6 +49,7 @@ class Uaudio_Storage_Model_Catalog_Product_Image extends Mage_Catalog_Model_Prod
             // check if cached file already exists
             if($this->_fileExists(implode('/', $path) . $file)) {
                 $this->_newFile = implode('/', $path) . $file;
+                $this->_fileName = $file;
                 return $this;
             } else if ((!$this->_fileExists($baseDir . $file)) || !$this->_checkMemory($baseDir . $file)) {
                 $file = null;
@@ -78,7 +79,6 @@ class Uaudio_Storage_Model_Catalog_Product_Image extends Mage_Catalog_Model_Prod
             }
             $this->_isBaseFilePlaceholder = true;
         }
-        $this->_fileName = $file;
 
         $baseFile = $baseDir . $file;
         if ((!$file) || (!$this->_fileExists($baseFile))) {
@@ -259,6 +259,22 @@ class Uaudio_Storage_Model_Catalog_Product_Image extends Mage_Catalog_Model_Prod
         $this->_getStorageModel()->moveFile($this->_tmpName, $this->getNewFile());
         $this->_tmpName = null;
         return $this;
+    }
+
+    /**
+     * Get baseFile for product
+     *
+     * @return string
+     */
+    public function getBaseFile() {
+        if(!$this->_baseFile && $this->_fileName) {
+            $baseDir = Mage::getSingleton('catalog/product_media_config')->getBaseMediaPath();
+            if(!$this->_fileExists($baseDir.$this->_fileName)) {
+                throw new Exception(Mage::helper('catalog')->__('Image file was not found.'));
+            }
+            $this->_baseFile = $baseDir.$this->_fileName;
+        }
+        return $this->_baseFile;
     }
 
     /**
